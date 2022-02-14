@@ -12,8 +12,9 @@ import java.util.List;
 @Setter
 public class Member {
 
-    @Id @GeneratedValue
-    @Column(name = "member_id", nullable = false)
+    @Id
+    @GeneratedValue
+    @Column(name = "member_id")
     private Long id;
 
     private String name;
