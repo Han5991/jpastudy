@@ -80,9 +80,8 @@ class OrderServiceTest {
         //when
 
         //then
-        assertThrows(NotEnoughStockException.class, () -> {
-            orderService.order(member.getId(), book.getId(), orderCount);
-        });
+        assertThrows(NotEnoughStockException.class, () ->
+                orderService.order(member.getId(), book.getId(), orderCount));
     }
 
     @Test
