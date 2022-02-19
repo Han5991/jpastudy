@@ -8,6 +8,7 @@ import com.jpabook.jpastudy.domain.item.Book;
 import com.jpabook.jpastudy.domain.item.Item;
 import com.jpabook.jpastudy.exception.NotEnoughStockException;
 import com.jpabook.jpastudy.repository.OrderRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,8 +33,10 @@ class OrderServiceTest {
     OrderRepository orderRepository;
 
     @Test
+    @DisplayName("상품주문")
     public void 상품주문() {
         //given
+
         Member member = createMember("회원1");
 
         Item book = createBook("시골 JPA", 10000, 10);
@@ -70,7 +73,8 @@ class OrderServiceTest {
     }
 
     @Test
-    public void 주문취소() {
+    @DisplayName("상품주문_재고수량초과")
+    public void orderCancel() {
         //given
         Member member = createMember("회원1");
         Item book = createBook("시골 JPA", 10000, 10);
@@ -85,6 +89,7 @@ class OrderServiceTest {
     }
 
     @Test
+    @DisplayName("주문취소")
     public void 상품주문_재고수량초과() {
         //given
         Member member = createMember("회원1");
