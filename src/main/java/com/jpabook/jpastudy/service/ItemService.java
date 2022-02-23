@@ -1,5 +1,6 @@
 package com.jpabook.jpastudy.service;
 
+import com.jpabook.jpastudy.domain.item.Book;
 import com.jpabook.jpastudy.domain.item.Item;
 import com.jpabook.jpastudy.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,6 @@ package com.jpabook.jpastudy.controller;
 import com.jpabook.jpastudy.domain.item.Book;
 import com.jpabook.jpastudy.service.ItemService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -58,10 +57,10 @@ public class ItemController {
     }
 
     @PostMapping("{itemId}/edit")
-    public String updateItem(@ModelAttribute("form") BookForm form) {
+    public String updateItem(@ModelAttribute BookForm form) {
 
         Book book = new Book();
-        book.setId(form.getId());
+        book.setId(form.getId()); // 이미 jpa에서 다녀왔기 때문에 준영속엔티티 (관리하지 않는 엔티티 -> 기존의 식별자를 가지고 있음)
         book.setName(form.getName());
         book.setPrice(form.getPrice());
         book.setStockQuantity(form.getStockQuantity());
