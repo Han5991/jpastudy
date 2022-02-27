@@ -46,4 +46,15 @@ public class MemberService {
     public Member findOne(Long memberId) {
         return memberRepository.findOne(memberId);
     }
+
+    @Transactional
+    public void update(Long id, String name) {
+        Member member = memberRepository.findOne(id);
+
+        if (member.getName().equals(name)) {
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        }
+
+        member.setName(name);
+    }
 }
