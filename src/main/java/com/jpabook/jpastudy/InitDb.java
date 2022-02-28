@@ -24,7 +24,7 @@ public class InitDb {
 
     private final InitService initService;
 
-//    @PostConstruct
+    @PostConstruct
     public void init() {
         initService.dbInit1();
         initService.dbInit2();
@@ -38,7 +38,6 @@ public class InitDb {
         private final EntityManager em;
 
         public void dbInit1() {
-            System.out.println("Init1" + this.getClass());
             Member member = createMember("userA", "서울", "1", "1111");
             em.persist(member);
 

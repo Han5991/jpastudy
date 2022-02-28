@@ -14,7 +14,8 @@ import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
-@Entity @Table(name = "orders")
+@Entity
+@Table(name = "orders")
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
@@ -27,11 +28,11 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
