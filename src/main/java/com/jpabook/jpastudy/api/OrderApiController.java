@@ -98,7 +98,7 @@ public class OrderApiController {
 //            order.getOrderItems().stream().forEach(o -> o.getItem().getName());
 //            orderItems = order.getOrderItems();
             orderItems = order.getOrderItems().stream()
-                    .map(orderItem -> new OrderItemDto(orderItem))
+                    .map(OrderItemDto::new)
                     .collect(toList());
         }
     }
