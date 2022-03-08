@@ -5,6 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,15 +30,42 @@ public class OrderQueryRepository {
         return result;
     }
 
+    public List<OrderQueryDto> findALlByDto_optimization() {
+        List<OrderQueryDto> result = findOrders();
+        result.forEach(o -> o.setOrderItems(findOrderItemMap(toOrderId(result)).get(o.getOrderId())));
+        return result;
+    }
+
+    private List<Long> toOrderId(List<OrderQueryDto> result) {
+        List<Long> orderIds = result.stream()
+                .map(OrderQueryDto::getOrderId)
+                .collect(toList());
+        return orderIds;
+    }
+
+    private Map<Long, List<OrderItemQueryDto>> findOrderItemMap(List<Long> orderIds) {
+        List<OrderItemQueryDto> orderItems = entityManager.createQuery(
+                        "select new com.jpabook.jpastudy.repository.order.query.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
+                                " from OrderItem oi" +
+                                " join oi.item i" +
+                                " where oi.order.id in :orderIds", OrderItemQueryDto.class)
+                .setParameter("orderIds", orderIds)
+                .getResultList();
+
+        Map<Long, List<OrderItemQueryDto>> orderItemMap = orderItems.stream()
+                .collect(groupingBy(OrderItemQueryDto::getOrderId));
+        return orderItemMap;
+    }
+
     /**
      * 1:N 관계(컬렉션)를 제외한 나머지를 한번에 조회
      */
     private List<OrderItemQueryDto> findOrderItems(Long orderId) {
         return entityManager.createQuery(
-                "select new com.jpabook.jpastudy.repository.order.query.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
-                        " from OrderItem oi" +
-                        " join oi.item i " +
-                        " where oi.order.id = :orderId", OrderItemQueryDto.class)
+                        "select new com.jpabook.jpastudy.repository.order.query.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
+                                " from OrderItem oi" +
+                                " join oi.item i" +
+                                " where oi.order.id = :orderId", OrderItemQueryDto.class)
                 .setParameter("orderId", orderId)
                 .getResultList();
     }
