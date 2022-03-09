@@ -31,12 +31,18 @@ public class OrderQueryRepository {
     }
 
     public List<OrderQueryDto> findALlByDto_optimization() {
+        //루트 조회(toOne 코드를 모두 한번에 조회)
         List<OrderQueryDto> result = findOrders();
-        result.forEach(o -> o.setOrderItems(findOrderItemMap(toOrderId(result)).get(o.getOrderId())));
+
+        //orderItem 컬렉션을 MAP 한방에 조회
+        Map<Long, List<OrderItemQueryDto>> orderItemMap = findOrderItemMap(toOrderIds(result));
+
+        //루프를 돌면서 컬렉션 추가(추가 쿼리 실행X)
+        result.forEach(o -> o.setOrderItems(orderItemMap.get(o.getOrderId())));
         return result;
     }
 
-    private List<Long> toOrderId(List<OrderQueryDto> result) {
+    private List<Long> toOrderIds(List<OrderQueryDto> result) {
         List<Long> orderIds = result.stream()
                 .map(OrderQueryDto::getOrderId)
                 .collect(toList());
@@ -83,4 +89,14 @@ public class OrderQueryRepository {
                 .getResultList();
     }
 
+    public List<OrderFlatDto> findAllByDto_flat() {
+        return entityManager.createQuery(
+                "select new com.jpabook.jpastudy.repository.order.query.OrderFlatDto(o.id, m.name, o.orderDate, o.status, d.address, i.name, oi.orderPrice, oi.count)" +
+                        " from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d" +
+                        " join o.orderItems oi" +
+                        " join oi.item i", OrderFlatDto.class)
+                .getResultList();
+    }
 }

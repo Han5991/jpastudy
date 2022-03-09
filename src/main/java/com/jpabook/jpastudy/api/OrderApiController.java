@@ -6,6 +6,7 @@ import com.jpabook.jpastudy.domain.OrderItem;
 import com.jpabook.jpastudy.domain.OrderStatus;
 import com.jpabook.jpastudy.repository.OrderRepository;
 import com.jpabook.jpastudy.repository.OrderSearch;
+import com.jpabook.jpastudy.repository.order.query.OrderItemQueryDto;
 import com.jpabook.jpastudy.repository.order.query.OrderQueryDto;
 import com.jpabook.jpastudy.repository.order.query.OrderQueryRepository;
 import lombok.Data;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 /**
  * V1. 엔티티 직접 노출
@@ -89,12 +90,22 @@ public class OrderApiController {
 
     @GetMapping("v4/orders")
     public List<OrderQueryDto> ordersV4() {
-       return orderQueryRepository.findOrderQueryDtos();
+        return orderQueryRepository.findOrderQueryDtos();
     }
 
     @GetMapping("v5/orders")
     public List<OrderQueryDto> ordersV5() {
         return orderQueryRepository.findALlByDto_optimization();
+    }
+
+    @GetMapping("v6/orders")
+    public List<OrderQueryDto> ordersV6() {
+        return orderQueryRepository.findAllByDto_flat()
+                .stream().collect(groupingBy(o -> new OrderQueryDto(o.getOrderId(), o.getName(), o.getOrderDate(), o.getOrderStatus(), o.getAddress()),
+                        mapping(o -> new OrderItemQueryDto(o.getOrderId(), o.getItemName(), o.getOrderPrice(), o.getCount()), toList())
+                )).entrySet().stream()
+                .map(e -> new OrderQueryDto(e.getKey().getOrderId(), e.getKey().getName(), e.getKey().getOrderDate(), e.getKey().getOrderStatus(), e.getKey().getAddress(), e.getValue()))
+                .collect(toList());
     }
 
     @Data
