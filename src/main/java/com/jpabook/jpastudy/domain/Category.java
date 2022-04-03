@@ -14,6 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Setter
 public class Category {
+
     @Id
     @GeneratedValue
     @Column(name = "category_id")

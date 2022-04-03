@@ -43,10 +43,9 @@ public class OrderQueryRepository {
     }
 
     private List<Long> toOrderIds(List<OrderQueryDto> result) {
-        List<Long> orderIds = result.stream()
+        return result.stream()
                 .map(OrderQueryDto::getOrderId)
                 .collect(toList());
-        return orderIds;
     }
 
     private Map<Long, List<OrderItemQueryDto>> findOrderItemMap(List<Long> orderIds) {
@@ -57,10 +56,8 @@ public class OrderQueryRepository {
                                 " where oi.order.id in :orderIds", OrderItemQueryDto.class)
                 .setParameter("orderIds", orderIds)
                 .getResultList();
-
-        Map<Long, List<OrderItemQueryDto>> orderItemMap = orderItems.stream()
+        return orderItems.stream()
                 .collect(groupingBy(OrderItemQueryDto::getOrderId));
-        return orderItemMap;
     }
 
     /**

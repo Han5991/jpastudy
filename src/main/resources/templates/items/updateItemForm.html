@@ -1,15 +1,12 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header" />
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head th:replace="fragments/header :: header"/>
 <body>
 
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-
     <form th:object="${form}" method="post">
-        <!-- id -->
-        <input type="hidden" th:field="*{id}" />
-
+        <input type="hidden" th:field="*{id}"/>
         <div class="form-group">
             <label th:for="name">상품명</label>
             <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요" />
@@ -32,9 +29,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-
     <div th:replace="fragments/footer :: footer" />
-
 </div>
 
 </body>

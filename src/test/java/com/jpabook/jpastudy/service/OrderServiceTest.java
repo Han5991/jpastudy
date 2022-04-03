@@ -35,10 +35,9 @@ class OrderServiceTest {
     @Test
     @DisplayName("상품주문")
     public void 상품주문() {
+
         //given
-
         Member member = createMember("회원1");
-
         Item book = createBook("시골 JPA", 10000, 10);
 
         int orderCount = 2;
