@@ -27,9 +27,7 @@ public class MemberController {
 
     @PostMapping("new")
     public String create(@Valid MemberForm form, BindingResult result) {
-        if (result.hasErrors()) {
-            return "members/createMemberForm";
-        }
+        if (result.hasErrors()) return "members/createMemberForm";
 
         Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
 
